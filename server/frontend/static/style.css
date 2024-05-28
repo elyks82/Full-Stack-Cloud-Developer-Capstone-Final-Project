@@ -124,3 +124,44 @@ img{
     text-align:center;
     box-shadow: 2px 2px 3px #999;  
 }
+
+/* Custom Styles */
+.contact-banner {
+  border: .15rem;
+  border-color: black;
+  border-style:solid;
+  border-radius: 1rem;
+  padding: 2rem;
+  width: 80%;
+}
+
+.second-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.cars-img {
+  justify-content: center;
+}
+
+.person-img {
+  width: 13rem;
+  height: auto;
+  margin: 0 2.5rem;
+}
+
+p {
+  text-align: center;
+  color: #6495ec;
+  padding: 0 4.5rem;
+}
+
+.v1 {
+  border-left: .15rem solid black;
+  height: 250px;
+}
+
+hr.solid {
+  border-top: .10rem solid black;
+}
