@@ -7,7 +7,6 @@ function App() {
     <Routes>
       <Route path="/login" element={<LoginPanel />} />
       <Route path="/register" element={<RegisterPanel />} />
-      <Route path="/logout" element={<LogoutPanel />} />
     </Routes>
   );
 }
