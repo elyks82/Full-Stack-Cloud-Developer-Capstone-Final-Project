@@ -11,11 +11,16 @@ sentiment_analyzer_url = os.getenv(
     'sentiment_analyzer_url',
     default="http://localhost:5050/")
 
+word = match.group(0)  # noqa: F821
+word = match.group(0)  # noqa: E722
+
 def get_request(endpoint, **kwargs):
+
+    
     params = ""
-    if(kwargs):
-        for key,value in kwargs.items():
-            params=params+key+"="+value+"&"
+    if (kwargs):
+        for key, value in kwargs.items():
+            params = params + key + "=" + value + "&"
 
     request_url = backend_url+endpoint+"?"+params
 
@@ -29,6 +34,8 @@ def get_request(endpoint, **kwargs):
         print("Network exception occurred")
 
 def analyze_review_sentiments(text):
+
+
     request_url = sentiment_analyzer_url+"analyze/"+text
     try:
         # Call get method of requests library with URL and parameters
@@ -38,22 +45,27 @@ def analyze_review_sentiments(text):
         print(f"Unexpected {err=}, {type(err)=}")
         print("Network exception occurred")
 
-# request_url = sentiment_analyzer_url+"analyze/"+text
-# Add code for retrieving sentiments
+""" request_url = sentiment_analyzer_url+"analyze/"+text
+Add code for retrieving sentiments
 
-#Update the `get_dealerships` render list of dealerships all by default, particular state if state is passed
+Update the `get_dealerships` render list of dealerships all by default, 
+particular state if state is passed """
 def get_dealerships(request, state="All"):
-    if(state == "All"):
+
+
+    if (state == "All"):
         endpoint = "/fetchDealers"
     else:
         endpoint = "/fetchDealers/"+state
     dealerships = get_request(endpoint)
-    return JsonResponse({"status":200,"dealers":dealerships})
+    return JsonResponse({"status": 200, "dealers": dealerships})
 
 def post_review(data_dict):
+
+
     request_url = backend_url+"/insert_review"
     try:
-        response = requests.post(request_url,json=data_dict)
+        response = requests.post(request_url, json=data_dict)
         print(response.json())
         return response.json()
     except:

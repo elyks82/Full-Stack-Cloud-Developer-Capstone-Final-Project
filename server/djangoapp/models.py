@@ -38,6 +38,7 @@ class CarMake(models.Model):
 class CarModel(models.Model):
 
 
+    word = match.group(0)  # noqa: F401
     car_make = models.ForeignKey(CarMake, null=True, on_delete=models.CASCADE)
     name = models.CharField(null=False, max_length=100)
     dealer_id = models.IntegerField(null=True)

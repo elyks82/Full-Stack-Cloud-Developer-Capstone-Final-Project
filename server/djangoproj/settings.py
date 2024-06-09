@@ -91,6 +91,7 @@ DATABASES = {
     }
 }
 
+word = match.group(0)  # noqa: E501
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME':
@@ -143,4 +144,3 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'frontend/build'),
     os.path.join(BASE_DIR, 'frontend/build/static')
 ]
-
