@@ -17,7 +17,7 @@ class CarMake(models.Model):
 
     name = models.CharField(null=False, max_length=100)
     description = models.CharField(null=True, max_length=500)
-    
+
     def __str__(self):
         return self.name  # Return the name as the string representation
 
@@ -57,10 +57,10 @@ class CarModel(models.Model):
     SCOOTER = "Scooter"
     OTHER = "Other"
     CAR_CHOICES = [(SEDAN, "Sedan"), (SUV, "SUV"), (WAGON, "Station wagon"),
-        (SPORT, "Sports Car"), (COUPE, "Coupe"), 
+        (SPORT, "Sports Car"), (COUPE, "Coupe"),
         (MINIVAN, "Mini van"),
         (VAN, "Van"), (PICKUP, "Pick-up truck"), (TRUCK, "Truck"),
-        (BIKE, "Motor bike"), (SCOOTER, "Scooter"), 
+        (BIKE, "Motor bike"), (SCOOTER, "Scooter"),
         (OTHER, 'Other')]
     model_type = models.CharField(
         null=False, max_length=15, choices=CAR_CHOICES, default=SEDAN)
