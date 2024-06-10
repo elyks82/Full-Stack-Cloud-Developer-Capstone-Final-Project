@@ -11,12 +11,9 @@ sentiment_analyzer_url = os.getenv(
     'sentiment_analyzer_url',
     default="http://localhost:5050/")
 
-word = match.group(0)  # noqa: F821
-word = match.group(0)  # noqa: E722
 
 def get_request(endpoint, **kwargs):
 
-    
     params = ""
     if (kwargs):
         for key, value in kwargs.items():
@@ -29,12 +26,12 @@ def get_request(endpoint, **kwargs):
         # Call get method of requests library with URL and parameters
         response = requests.get(request_url)
         return response.json()
-    except:
+    except Exception as e:
         # If any error occurs
-        print("Network exception occurred")
+        print(f"Error: {e}")
+
 
 def analyze_review_sentiments(text):
-
 
     request_url = sentiment_analyzer_url+"analyze/"+text
     try:
@@ -45,13 +42,15 @@ def analyze_review_sentiments(text):
         print(f"Unexpected {err=}, {type(err)=}")
         print("Network exception occurred")
 
+
 """ request_url = sentiment_analyzer_url+"analyze/"+text
 Add code for retrieving sentiments
 
-Update the `get_dealerships` render list of dealerships all by default, 
+Update the `get_dealerships` render list of dealerships all by default,
 particular state if state is passed """
-def get_dealerships(request, state="All"):
 
+
+def get_dealerships(request, state="All"):
 
     if (state == "All"):
         endpoint = "/fetchDealers"
@@ -60,13 +59,13 @@ def get_dealerships(request, state="All"):
     dealerships = get_request(endpoint)
     return JsonResponse({"status": 200, "dealers": dealerships})
 
-def post_review(data_dict):
 
+def post_review(data_dict):
 
     request_url = backend_url+"/insert_review"
     try:
         response = requests.post(request_url, json=data_dict)
         print(response.json())
         return response.json()
-    except:
-        print("Network exception occurred")
+    except Exception as e:
+        print(f"Error: {e}")

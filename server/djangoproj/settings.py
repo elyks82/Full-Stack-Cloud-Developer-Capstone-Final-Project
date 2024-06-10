@@ -91,11 +91,11 @@ DATABASES = {
     }
 }
 
-word = match.group(0)  # noqa: E501
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME':
-        'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'django.contrib.auth.password_validation.'
+         + 'UserAttributeSimilarityValidator',
     },
     {
         'NAME':

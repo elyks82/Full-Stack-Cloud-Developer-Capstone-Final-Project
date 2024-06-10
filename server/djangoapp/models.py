@@ -12,13 +12,15 @@ from django.db import models
  - Any other fields you would like to include in car make model
  - __str__ method to print a car make object """
 
-class CarMake(models.Model):
 
+class CarMake(models.Model):
 
     name = models.CharField(null=False, max_length=100)
     description = models.CharField(null=True, max_length=500)
+    
     def __str__(self):
         return self.name  # Return the name as the string representation
+
 
 """
 #### Car Model model ####
@@ -35,10 +37,9 @@ class CarMake(models.Model):
 
 """
 
+
 class CarModel(models.Model):
 
-
-    word = match.group(0)  # noqa: F401
     car_make = models.ForeignKey(CarMake, null=True, on_delete=models.CASCADE)
     name = models.CharField(null=False, max_length=100)
     dealer_id = models.IntegerField(null=True)
@@ -55,10 +56,12 @@ class CarModel(models.Model):
     BIKE = "Bike"
     SCOOTER = "Scooter"
     OTHER = "Other"
-    CAR_CHOICES = [(SEDAN, "Sedan"), (SUV, "SUV"), (WAGON, "Station wagon"), 
-                    (SPORT, "Sports Car"), (COUPE, "Coupe"), (MINIVAN, "Mini van"), 
-                    (VAN, "Van"), (PICKUP, "Pick-up truck"), (TRUCK, "Truck"), 
-                    (BIKE, "Motor bike"), (SCOOTER, "Scooter"), (OTHER, 'Other')]
+    CAR_CHOICES = [(SEDAN, "Sedan"), (SUV, "SUV"), (WAGON, "Station wagon"),
+        (SPORT, "Sports Car"), (COUPE, "Coupe"), 
+        (MINIVAN, "Mini van"),
+        (VAN, "Van"), (PICKUP, "Pick-up truck"), (TRUCK, "Truck"),
+        (BIKE, "Motor bike"), (SCOOTER, "Scooter"), 
+        (OTHER, 'Other')]
     model_type = models.CharField(
         null=False, max_length=15, choices=CAR_CHOICES, default=SEDAN)
 
@@ -71,4 +74,4 @@ class CarModel(models.Model):
 
     def __str__(self):
         return self.name + ", " + str(self.year) + ", " + self.model_type
-        
+
