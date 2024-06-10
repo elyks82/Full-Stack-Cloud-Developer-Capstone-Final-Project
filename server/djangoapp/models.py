@@ -56,7 +56,8 @@ class CarModel(models.Model):
     BIKE = "Bike"
     SCOOTER = "Scooter"
     OTHER = "Other"
-    CAR_CHOICES = [(SEDAN, "Sedan"), (SUV, "SUV"), (WAGON, "Station wagon"),
+    CAR_CHOICES = [
+        (SEDAN, "Sedan"), (SUV, "SUV"), (WAGON, "Station wagon"),
         (SPORT, "Sports Car"), (COUPE, "Coupe"),
         (MINIVAN, "Mini van"),
         (VAN, "Van"), (PICKUP, "Pick-up truck"), (TRUCK, "Truck"),
