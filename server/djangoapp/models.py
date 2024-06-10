@@ -74,4 +74,3 @@ class CarModel(models.Model):
 
     def __str__(self):
         return self.name + ", " + str(self.year) + ", " + self.model_type
-
