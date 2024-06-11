@@ -120,11 +120,13 @@ def get_dealer_details(request, dealer_id):
 
 # View to submit a new review
 def add_review(request, dealer_id):
-    url = f"https://5b93346d.us-south.apigw.appdomain.cloud/dealerships/dealer-get?dealerId={dealer_id}"
     # User must be logged in before posting a review
     if request.user.is_authenticated:
         # GET request renders the page with the form for filling out a review
         if request.method == "GET":
+            urlAux1 = f"https://5b93346d.us-south.apigw.appdomain.cloud/"
+            urlAux2 = f"dealerships/dealer-get?dealerId={dealer_id}"
+            url = "".join([urlAux1, urlAux2])
             # Get dealer details from the API
             context = {
                 "cars": CarModel.objects.all(),
