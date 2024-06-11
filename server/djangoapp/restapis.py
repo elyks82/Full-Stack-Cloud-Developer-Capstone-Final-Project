@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 import requests
 import json
 import os
@@ -7,9 +8,7 @@ from decouple import config
 from ibm_watson import NaturalLanguageUnderstandingV1
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 from ibm_watson.natural_language_understanding_v1 import Features, SentimentOptions
-from dotenv import load_dotenv
 
-load_dotenv()
 
 backend_url = os.getenv(
     'backend_url', default="http://localhost:3030")
@@ -35,24 +34,6 @@ def get_request(endpoint, **kwargs):
         print(f"Error: {e}")
 
 
-def analyze_review_sentiments(text):
-    
-    request_url = sentiment_analyzer_url+"analyze/"+text
-    try:
-        # Call get method of requests library with URL and parameters
-        response = requests.get(request_url)
-        return response.json()
-    except Exception as err:
-        print(f"Unexpected {err=}, {type(err)=}")
-        print("Network exception occurred")
-
-
-""" request_url = sentiment_analyzer_url+"analyze/"+text
-Add code for retrieving sentiments
-
-Update the `get_dealerships` render list of dealerships all by default,
-particular state if state is passed """
-
 
 #Update the `get_dealerships` render list of dealerships all by default, particular state if state is passed
 
@@ -76,3 +57,37 @@ def post_review(data_dict):
         return response.json()
     except Exception as e:
         print(f"Error: {e}")
+
+
+# Calls the Watson NLU API and analyses the sentiment of a review
+def analyze_review_sentiments(review_text):
+    # Watson NLU configuration
+    try:
+        if os.environ['env_type'] == 'PRODUCTION':
+            url = os.environ['WATSON_NLU_URL']
+            api_key = os.environ["WATSON_NLU_API_KEY"]
+    except KeyError:
+        url = config('WATSON_NLU_URL')
+        api_key = config('WATSON_NLU_API_KEY')
+
+    version = '2021-08-01'
+    authenticator = IAMAuthenticator(api_key)
+    nlu = NaturalLanguageUnderstandingV1(
+        version=version, authenticator=authenticator)
+    nlu.set_service_url(url)
+
+    # get sentiment of the review
+    try:
+        response = nlu.analyze(text=review_text, features=Features(
+            sentiment=SentimentOptions())).get_result()
+        print(json.dumps(response))
+        # sentiment_score = str(response["sentiment"]["document"]["score"])
+        sentiment_label = response["sentiment"]["document"]["label"]
+    except:
+        print("Review is too short for sentiment analysis. Assigning default sentiment value 'neutral' instead")
+        sentiment_label = "neutral"
+
+    # print(sentiment_score)
+    print(sentiment_label)
+
+    return sentiment_label
