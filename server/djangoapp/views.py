@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from .models import CarModel
@@ -90,7 +89,7 @@ def registration_request(request):
         except Exception as e:
             # If not, simply log this is a new user
             logger.debug("{} is new user".format(username))
-            print("Error: {e}")
+            print(f"Error: {e}")
         # If it is a new user
         if not user_exist:
             # Create user in auth_user table
@@ -126,7 +125,7 @@ def add_review(request, dealer_id):
         # GET request renders the page with the form for filling out a review
         if request.method == "GET":
             url = f"https://5b93346d.us-south.apigw.appdomain.cloud/"
-            +"dealerships/dealer-get?dealerId={dealer_id}"
+            +f"dealerships/dealer-get?dealerId={dealer_id}"
             # Get dealer details from the API
             context = {
                 "cars": CarModel.objects.all(),
@@ -139,13 +138,15 @@ def add_review(request, dealer_id):
         if request.method == "POST":
             form = request.POST
             review = dict()
-            review["name"] = f"{request.user.first_name} {request.user.last_name}"
+            review["name"] = f"{request.user.first_name} "
+            + f"{request.user.last_name}"
             review["dealership"] = dealer_id
             review["review"] = form["content"]
             review["purchase"] = form.get("purchasecheck")
             if review["purchase"]:
-                review["purchase_date"] = datetime.strptime(form.get("purchasedate"),
-                                                            "%m/%d/%Y").isoformat()
+                review["purchase_date"] = datetime.strptime(
+                    form.get("purchasedate"),
+                    "%m/%d/%Y").isoformat()
             car = CarModel.objects.get(pk=form["car"])
             review["car_make"] = car.car_make.name
             review["car_model"] = car.name
@@ -153,8 +154,9 @@ def add_review(request, dealer_id):
 
             # If the user bought the car, get the purchase date
             if form.get("purchasecheck"):
-                review["purchase_date"] = datetime.strptime(form.get("purchasedate"),
-                                                            "%m/%d/%Y").isoformat()
+                review["purchase_date"] = datetime.strptime(
+                    form.get("purchasedate"),
+                    "%m/%d/%Y").isoformat()
             else:
                 review["purchase_date"] = None
 

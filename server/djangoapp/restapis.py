@@ -86,9 +86,9 @@ def analyze_review_sentiments(review_text):
         # sentiment_score = str(response["sentiment"]["document"]["score"])
         sentiment_label = response["sentiment"]["document"]["label"]
     except Exception as e:
-        print(f"Review is too short for sentiment analysis. "
-              + "Assigning default sentiment value 'neutral' instead \n"
-              + "Error: {e}")
+        print("Review is too short for sentiment analysis. "
+              + "Assigning default sentiment value 'neutral' instead \n")
+        print(f"Error: {e}")
         sentiment_label = "neutral"
 
     # print(sentiment_score)
