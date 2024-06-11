@@ -24,7 +24,7 @@ def get_request(endpoint, **kwargs):
     params = ""
     if (kwargs):
         for key, value in kwargs.items():
-            params = params+key+ "=" +value+ "&"
+            params = params+key + "=" + value + "&"
     request_url = backend_url+endpoint+"?"+params
     print("GET from {} ".format(request_url))
     try:
@@ -36,7 +36,8 @@ def get_request(endpoint, **kwargs):
         print(f"Error: {e}")
 
 
-# Update the `get_dealerships` render list of dealerships all by default, particular state if state is passed
+# Update the `get_dealerships` render list of dealerships all by default,
+# particular state if state is passed
 
 
 def get_dealerships(request, state="All"):
@@ -85,7 +86,7 @@ def analyze_review_sentiments(review_text):
         # sentiment_score = str(response["sentiment"]["document"]["score"])
         sentiment_label = response["sentiment"]["document"]["label"]
     except Exception as e:
-        print("Review is too short for sentiment analysis. "
+        print(f"Review is too short for sentiment analysis. "
               + "Assigning default sentiment value 'neutral' instead \n"
               + "Error: {e}")
         sentiment_label = "neutral"

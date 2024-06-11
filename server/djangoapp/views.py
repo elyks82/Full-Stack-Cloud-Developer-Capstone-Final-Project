@@ -1,12 +1,10 @@
 from django.shortcuts import render
-from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.models import User
-from django.shortcuts import get_object_or_404, render, redirect
+from django.shortcuts import render, redirect
 from .models import CarModel
 from .restapis import get_dealer_by_id, get_dealers_from_cf
 from .restapis import get_dealer_reviews_from_cf, post_request
 from django.contrib.auth import login, logout, authenticate
-from django.contrib import messages
 from datetime import datetime
 import logging
 
@@ -96,8 +94,8 @@ def registration_request(request):
         # If it is a new user
         if not user_exist:
             # Create user in auth_user table
-            user = User.objects.create_user(username=username, 
-                                            first_name=first_name, 
+            user = User.objects.create_user(username=username,
+                                            first_name=first_name,
                                             last_name=last_name,
                                             password=password)
             # Login the user and redirect to course list page
@@ -136,7 +134,7 @@ def add_review(request, dealer_id):
             }
             return render(request, 'djangoapp/add_review.html', context)
 
-        # POST request posts the content in the review submission form to the 
+        # POST request posts the content in the review submission form to the
         # Cloudant DB using the post_review Cloud Function
         if request.method == "POST":
             form = request.POST
@@ -146,7 +144,7 @@ def add_review(request, dealer_id):
             review["review"] = form["content"]
             review["purchase"] = form.get("purchasecheck")
             if review["purchase"]:
-                review["purchase_date"] = datetime.strptime(form.get("purchasedate"), 
+                review["purchase_date"] = datetime.strptime(form.get("purchasedate"),
                                                             "%m/%d/%Y").isoformat()
             car = CarModel.objects.get(pk=form["car"])
             review["car_make"] = car.car_make.name
@@ -155,14 +153,14 @@ def add_review(request, dealer_id):
 
             # If the user bought the car, get the purchase date
             if form.get("purchasecheck"):
-                review["purchase_date"] = datetime.strptime(form.get("purchasedate"), 
+                review["purchase_date"] = datetime.strptime(form.get("purchasedate"),
                                                             "%m/%d/%Y").isoformat()
             else:
                 review["purchase_date"] = None
 
-            url = "https://9bebcb01.eu-de.apigw.appdomain.cloud/api/review"  
+            url = "https://9bebcb01.eu-de.apigw.appdomain.cloud/api/review"
             # API Cloud Function route
-            json_payload = {"review": review}  
+            json_payload = {"review": review}
             # Create a JSON payload that contains the review data
 
             # Performing a POST request with the review
@@ -170,12 +168,12 @@ def add_review(request, dealer_id):
             if int(result.status_code) == 200:
                 print("Review posted successfully.")
 
-            # After posting the review the user is redirected back to 
+            # After posting the review the user is redirected back to
             # the dealer details page
             return redirect("djangoapp:dealer_details", dealer_id=dealer_id)
 
     else:
         # If user isn't logged in, redirect to login page
         print("User must be authenticated before posting a review. "
-              +"Please log in.")
+              + "Please log in.")
         return redirect("/djangoapp/login")
