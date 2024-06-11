@@ -6,7 +6,8 @@ from dotenv import load_dotenv
 from decouple import config
 from ibm_watson import NaturalLanguageUnderstandingV1
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
-from ibm_watson.natural_language_understanding_v1 import Features, SentimentOptions
+from ibm_watson.natural_language_understanding_v1 import Features
+from ibm_watson.natural_language_understanding_v1 import SentimentOptions
 
 
 load_dotenv()
@@ -23,7 +24,7 @@ def get_request(endpoint, **kwargs):
     params = ""
     if (kwargs):
         for key, value in kwargs.items():
-            params=params+key+"="+value+"&"
+            params = params+key+ "=" +value+ "&"
     request_url = backend_url+endpoint+"?"+params
     print("GET from {} ".format(request_url))
     try:
@@ -85,7 +86,8 @@ def analyze_review_sentiments(review_text):
         sentiment_label = response["sentiment"]["document"]["label"]
     except Exception as e:
         print("Review is too short for sentiment analysis. "
-              + "Assigning default sentiment value 'neutral' instead")
+              + "Assigning default sentiment value 'neutral' instead \n"
+              + "Error: {e}")
         sentiment_label = "neutral"
 
     # print(sentiment_score)
