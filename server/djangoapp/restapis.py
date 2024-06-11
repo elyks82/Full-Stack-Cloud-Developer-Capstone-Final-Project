@@ -2,13 +2,14 @@ from django.http import JsonResponse
 import requests
 import json
 import os
-from .models import CarDealer, DealerReview
-from requests.auth import HTTPBasicAuth
+from dotenv import load_dotenv
 from decouple import config
 from ibm_watson import NaturalLanguageUnderstandingV1
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 from ibm_watson.natural_language_understanding_v1 import Features, SentimentOptions
 
+
+load_dotenv()
 
 backend_url = os.getenv(
     'backend_url', default="http://localhost:3030")
@@ -18,10 +19,10 @@ sentiment_analyzer_url = os.getenv(
 
 
 def get_request(endpoint, **kwargs):
-    
+
     params = ""
-    if(kwargs):
-        for key,value in kwargs.items():
+    if (kwargs):
+        for key, value in kwargs.items():
             params=params+key+"="+value+"&"
     request_url = backend_url+endpoint+"?"+params
     print("GET from {} ".format(request_url))
@@ -34,25 +35,24 @@ def get_request(endpoint, **kwargs):
         print(f"Error: {e}")
 
 
-
-#Update the `get_dealerships` render list of dealerships all by default, particular state if state is passed
+# Update the `get_dealerships` render list of dealerships all by default, particular state if state is passed
 
 
 def get_dealerships(request, state="All"):
 
-    if(state == "All"):
+    if (state == "All"):
         endpoint = "/fetchDealers"
     else:
         endpoint = "/fetchDealers/"+state
     dealerships = get_request(endpoint)
-    return JsonResponse({"status":200,"dealers":dealerships})
+    return JsonResponse({"status": 200, "dealers": dealerships})
 
 
 def post_review(data_dict):
 
     request_url = backend_url+"/insert_review"
     try:
-        response = requests.post(request_url,json=data_dict)
+        response = requests.post(request_url, json=data_dict)
         print(response.json())
         return response.json()
     except Exception as e:
@@ -70,7 +70,7 @@ def analyze_review_sentiments(review_text):
         url = config('WATSON_NLU_URL')
         api_key = config('WATSON_NLU_API_KEY')
 
-    version = '2021-08-01'
+    version = '2024-6-11'
     authenticator = IAMAuthenticator(api_key)
     nlu = NaturalLanguageUnderstandingV1(
         version=version, authenticator=authenticator)
@@ -83,8 +83,9 @@ def analyze_review_sentiments(review_text):
         print(json.dumps(response))
         # sentiment_score = str(response["sentiment"]["document"]["score"])
         sentiment_label = response["sentiment"]["document"]["label"]
-    except:
-        print("Review is too short for sentiment analysis. Assigning default sentiment value 'neutral' instead")
+    except Exception as e:
+        print("Review is too short for sentiment analysis. "
+              + "Assigning default sentiment value 'neutral' instead")
         sentiment_label = "neutral"
 
     # print(sentiment_score)
