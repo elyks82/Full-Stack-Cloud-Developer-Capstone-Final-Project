@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from models import CarMake, CarModel
+from .models import CarMake, CarModel
 
 
 def initiate():
